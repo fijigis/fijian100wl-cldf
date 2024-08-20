@@ -2,22 +2,23 @@ import re
 
 import pandas as pd
 from pycldf import StructureDataset
+from pyproj import Proj
 
-orig_path = "data/Fiji100WL_Feb2020_GCS_TableToExcel.xlsx"
+orig_path = "data/AllVillages_Prov_Joined_XY_UTM60_18Mar2024.xlsx"
 
 df = pd.read_excel(orig_path, header=0)
+
+pj = Proj("+proj=utm +zone=60 +south +datum=WGS84 +units=m +no_defs +type=crs")
 
 languages = []
 id2language = {}
 for index, row in df.iterrows():
-    lon, lat = float(row["POINT_X"]), float(row["POINT_Y"])
+    lon, lat = pj(float(row["POINT_X"]), float(row["POINT_Y"]), inverse=True)
     obj = {
         "ID": index,
-        "Name": row["VillagesComCodes_Name"],
-        "Communalect": None if pd.isna(row["Communalect"]) else row["Communalect"],
-        "CommunalectGroup": None
-        if pd.isna(row["CommunlectGroup"])
-        else row["CommunlectGroup"],  # typo in the sheet
+        "Name": row["Village_Name_Only"].replace(" ", ""),
+        "Communalect": row["Communalect"],
+        "CommunalectGroup": row["ComGroupFeb2019"],
         "Macroarea": "Papunesia",
         "Latitude": lat,
         "Longitude": lon,
@@ -30,18 +31,16 @@ id2concept = {}
 nonconcepts = set(
     [
         "OBJECTID_1",
-        "VillagesComCodes_Name",
-        "VillagesComCodes_Tikina_Makawa",
-        "VillagesComCodes_PROVINCE",
-        "ComCodeGrps_Communalect",
-        "ComGroupFeb2019",
-        "ComComGroup",
-        "CCODE",
-        "CGCODE",
-        "Com_ComGroup",
+        "Village_Name_Only",
         "Communalect",
-        "CommunlectGroup",  # typo in the sheet
-        "CCODE_1",
+        "ComGroupFeb2019",
+        "ComCode",
+        "ComCG",
+        "NAME",
+        "DIVISION",
+        "Status",
+        "Status2",
+        "Count",
         "POINT_X",
         "POINT_Y",
     ]
@@ -63,7 +62,7 @@ for cname in df.columns.tolist():
 
 values = []
 for language_id, row in df.iterrows():
-    assert row["VillagesComCodes_Name"] == id2language[language_id]["Name"]
+    # assert row["VillagesComCodes_Name"] == id2language[language_id]["Name"]
     for concept in concepts:
         entry = row[concept["Name"]]
         if pd.isna(entry):
