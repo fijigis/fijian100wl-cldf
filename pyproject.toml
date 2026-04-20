@@ -1,20 +1,20 @@
-[tool.poetry]
+[project]
 name = "fijian100wl-cldf"
 version = "0.1.0"
-description = ""
-authors = ["MURAWAKI Yugo <murawaki@i.kyoto-u.ac.jp>"]
+description = "Convert the Fijian Language 100 Word List snapshot to CLDF."
 readme = "README.md"
-packages = [{include = "fijian100wl_cldf"}]
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "pycldf>=1.38.1,<2",
+    "pandas>=2.1.1",
+    "openpyxl>=3.1.5,<4",
+    "pyproj>=3.6.1,<4",
+]
 
-[tool.poetry.dependencies]
-python = "<3.13,>=3.9"
-pycldf = "^1.38.1"
-pandas = ">=2.1.1"
-pre-commit = ">=3.5.0"
-openpyxl = "^3.1.5"
-pyproj = "^3.6.1"
+[dependency-groups]
+dev = [
+    "pre-commit>=3.5.0",
+]
 
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+package = false
