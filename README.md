@@ -6,12 +6,18 @@
 - uv
 - Dependencies: See [pyproject.toml](./pyproject.toml).
 
-## Getting Started
-
-Get the Excel data source (not included in this repository) and run the Python script'
-
 ```shell
-$ uv run python convert.py
+$ uv lock
+$ uv sync
+$ uv cldfbench catconfig
 ```
 
-This will create a subdirectory `fijian100wl` and outputs CSV and JSON files there.
+## Getting Started
+
+Put the Excel data source (not included in this repository) in the `raw/` directory and run the Python script'
+
+```shell
+$ uv run cldfbench makecldf cldfbench_fijian100wl.py
+```
+
+This will create a subdirectory `cldf/` and outputs CSV and JSON files there.

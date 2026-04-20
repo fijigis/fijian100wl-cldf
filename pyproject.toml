@@ -9,6 +9,9 @@ dependencies = [
     "pandas>=2.1.1",
     "openpyxl>=3.1.5,<4",
     "pyproj>=3.6.1,<4",
+    "cldfbench>=1.14.3",
+    "pyglottolog>=3.16.0",
+    "pyconcepticon>=3.1.0",
 ]
 
 [dependency-groups]
